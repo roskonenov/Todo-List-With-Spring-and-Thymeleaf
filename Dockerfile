@@ -1,7 +1,7 @@
 # ----------------------
 # Build stage
 # ----------------------
-FROM maven:3.8.4-openjdk-17 AS build
+FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /app
 
