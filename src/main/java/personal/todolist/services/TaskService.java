@@ -18,8 +18,8 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public void createTask(String title) {
-        taskRepository.save(
+    public Task createTask(String title) {
+        return taskRepository.save(
                 new Task().setName(title).setCompleted(false)
         );
     }

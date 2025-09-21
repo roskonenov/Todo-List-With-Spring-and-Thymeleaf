@@ -1,11 +1,16 @@
 package personal.todolist.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Entity
 @Table(name = "tasks")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Task {
 
     @Id
