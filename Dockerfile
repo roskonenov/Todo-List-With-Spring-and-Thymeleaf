@@ -1,7 +1,7 @@
 # -------------------------
 # Build stage
 # -------------------------
-FROM eclipse-temurin:21-jdk AS build
+FROM eclipse-temurin:21 AS build
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ RUN mvn clean package -DskipTests
 # -------------------------
 # Runtime stage
 # -------------------------
-FROM eclipse-temurin:21-jdk-slim
+FROM eclipse-temurin:21
 
 WORKDIR /app
 
