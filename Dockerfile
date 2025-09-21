@@ -1,19 +1,30 @@
-FROM maven:3.8.4-openjdk-17 AS build
+# ----------------------
+# Build stage
+# ----------------------
+FROM maven:3.9.2-openjdk-17 AS build
 
 WORKDIR /app
 
+# Копираме pom.xml и кешираме зависимостите
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
+# Копираме изходния код и билдваме проекта
 COPY src ./src
 RUN mvn clean package -DskipTests
 
+# ----------------------
+# Runtime stage
+# ----------------------
 FROM openjdk:21-jdk-slim
 
 WORKDIR /app
 
-COPY --from=build /app/target/TodoList-0.0.1-SNAPSHOT.jar .
+# Копираме jar файла от build stage
+COPY --from=build /app/target/*.jar app.jar
 
+# Expose порт
 EXPOSE 8080
 
-ENTRYPOINT["java", "-jar", "/app/TodoList-0.0.1-SNAPSHOT.jar" ]
+# Стартираме приложението
+ENTRYPOINT ["java", "-jar", "app.jar"]
