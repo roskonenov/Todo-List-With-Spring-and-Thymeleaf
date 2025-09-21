@@ -1,30 +1,31 @@
-# ----------------------
+# -------------------------
 # Build stage
-# ----------------------
+# -------------------------
 FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /app
 
-# Копираме pom.xml и кешираме зависимостите
+# Копиране на pom.xml и кеширане на зависимостите
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN apt-get update && apt-get install -y maven \
+    && mvn dependency:go-offline
 
-# Копираме изходния код и билдваме проекта
+# Копиране на изходния код и билд
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# ----------------------
+# -------------------------
 # Runtime stage
-# ----------------------
-FROM openjdk:21-jdk-slim
+# -------------------------
+FROM eclipse-temurin:21-jdk-slim
 
 WORKDIR /app
 
-# Копираме jar файла от build stage
+# Копиране на готовия jar от build stage
 COPY --from=build /app/target/*.jar app.jar
 
-# Expose порт
+# Отваряне на порт 8080
 EXPOSE 8080
 
-# Стартираме приложението
+# Стартиране на приложението
 ENTRYPOINT ["java", "-jar", "app.jar"]
